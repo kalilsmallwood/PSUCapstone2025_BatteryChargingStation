@@ -4,7 +4,7 @@ import os
 import zipfile
 
 def plot_and_save(csv_path, output_zip):
-    # Load CSV data
+    #Load CSV data
     df = pd.read_csv(csv_path)
     df['time'] = pd.to_datetime(df['time'], format='%H:%M:%S')
 
@@ -38,13 +38,13 @@ def plot_and_save(csv_path, output_zip):
         plot_files.append(plot_path)
         plt.close()
 
-    # Create a ZIP file
+    #Create the ZIP file
     with zipfile.ZipFile(output_zip, 'w') as zipf:
         for file in plot_files:
             zipf.write(file, os.path.basename(file))
 
 if __name__ == "__main__":
-    csv_path = "/Users/kalilsmallwood/Desktop/Capstone 2025/PSUCapstone2025_BatteryChargingStation/test_data_csv(fake).csv" 
-    output_zip = "plots.zip"
+    csv_path = "/Users/kalilsmallwood/Desktop/Capstone 2025/PSUCapstone2025_BatteryChargingStation/test_data_csv(fake).csv"#Will change to wherever the data for that day or session gets saved 
+    output_zip = "plots.zip"#Change to SD card or wherever we are gonna save the plots to
     plot_and_save(csv_path, output_zip)
     print(f"Plots saved in {output_zip}")
