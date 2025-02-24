@@ -43,14 +43,14 @@ class BatteryMonitorUI(QMainWindow):
         spacing = 80  # Space between batteries
 
         battery_data = [
-            {"charge": 73, "connected": True},
-            {"charge": 0, "connected": False},
-            {"charge": 0, "connected": False},
-            {"charge": 0, "connected": False},
-            {"charge": 0, "connected": False},
-            {"charge": 20, "connected": True},
-            {"charge": 0, "connected": False},
-            {"charge": 0, "connected": False},
+            {"charge": 73, "connected": True, "Done": False, "amperage": 2.83},
+            {"charge": 0, "connected": False, "Done": False, "amperage": 0},
+            {"charge": 100, "connected": True, "Done": False, "amperage": 0},
+            {"charge": 0, "connected": False, "Done": False, "amperage": 0},
+            {"charge": 0, "connected": False, "Done": False, "amperage": 0},
+            {"charge": 20, "connected": True, "Done": False, "amperage": 3.21},
+            {"charge": 0, "connected": False, "Done": False, "amperage": 0},
+            {"charge": 0, "connected": False, "Done": False, "amperage": 0},
         ]
         
         for i, battery in enumerate(battery_data):
@@ -74,6 +74,7 @@ class BatteryMonitorUI(QMainWindow):
             color = QColor("green") if charge_level > 50 else QColor("red")
             painter.setBrush(QBrush(color))
             painter.drawRect(QRectF(x, y + (height - fill_height), width, fill_height))
+        
         else:
             painter.setBrush(QBrush(QColor(Qt.GlobalColor.black)))
             painter.drawRect(x, y, width, height)
@@ -81,11 +82,20 @@ class BatteryMonitorUI(QMainWindow):
         # Draw Battery Label
         label_text = f"B{index+1}"
         painter.setPen(Qt.GlobalColor.white)
-        painter.drawText(x + 15, y - 10, label_text)
-        
-        if battery["connected"]:
+        painter.drawText(x + 25, y - 10, label_text)
+        charge_level = battery["charge"]
+        amp_level = battery["amperage"]
+        if battery["connected"] and charge_level < 100:
             painter.drawText(x, y + height + 15, "Connected")
-            painter.drawText(x, y + height + 30, f"{charge_level}%")
+            painter.drawText(x + 20, y + height + 30, f"{charge_level}%")
+            painter.drawText(x+13, y + height + 45, f"{amp_level} (A)")
+
+
+
+        if battery["connected"] and charge_level == 100:
+            battery["Done"] = True
+            painter.drawText(x + 15, y + height + 15, "Done!")
+        
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
